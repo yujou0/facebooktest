@@ -8,6 +8,7 @@
     <title>Document</title>
 </head>
 <body>
+    <!-- 串接fb登入登出 api -->
     <div id="fb-root"></div>
     <!-- <div class="fb-login-button" data-width="" data-size="large" data-button-type="continue_with" data-layout="default" data-auto-logout-link="false" data-use-continue-as="false"></div> -->
     <!-- <div id="spinner"
@@ -26,10 +27,90 @@
     data-size="large"
     data-button-type="continue_with"
     data-use-continue-as="true"
+    autologoutlink="true"
     ></div>
+<!-- 送出資料用表單 -->
+    <div>
+        <form action="">
+            <label for="">姓名</label>
+            <input id="input2" placeholder="請填入姓名"></input>
+            <br>
+            <label for="">電話</label>
+            <input id="input3" placeholder="請填入電話"></input>
+            <br>
+            <label for="">居住地區</label>
+            <br>
+            <input type="radio" name="location" value="Taipei"> 台北<br>
+            <input type="radio" name="location" value="newTaipei"> 新北<br>
+
+            <button id="button1" type="submit">送出</button>
+            <button type="reset">重新填寫</button>
+        </form>
+    </div>
+    
     
 </body>
 <script>
+    // 串get/post 的api
+  let inputValue;
+  let inputValue1;
+  const input = document.querySelector('#input2');
+  const input1 = document.querySelector('#input3');
+  const input2 = document.querySelector('.input4');
+
+  input.addEventListener('input', (e) => {
+    inputValue = e.target.value;
+  })
+  input1.addEventListener('input', (e) => {
+    inputValue1 = e.target.value;
+  })
+  input1.addEventListener('input', (e) => {
+    inputValue2 = e.target.value;
+  })
+
+  const button = document.querySelector('#button1');
+  button.addEventListener('click', (e) => {
+    console.log(inputValue)
+    postData('http://localhost:8080/user', {username: [inputValue, inputValue1, inputValue2]})
+      .then(data => console.log(data)) // JSON from `response.json()` call
+      .catch(error => console.error(error))
+  })
+  // xmlhttprequest
+
+  // Endpoint: http://localhost:8080
+  // Method: GET 
+  // Path: /user?weight=70
+   // GET
+
+    fetch('http://localhost:8080/test')
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(myJson) {
+    });
+
+  // --
+  // Method: POST
+  // Body: {weight: 70}
+// POST
+
+
+function postData(url, data) {
+// Default options are marked with *
+return fetch(url, {
+  body: JSON.stringify(data), // must match 'Content-Type' header
+  headers: {
+    // 'user-agent': 'Mozilla/4.0 MDN Example',
+    // 'content-type': 'application/json'
+  },
+  method: 'POST', // *GET, POST, PUT, DELETE, etc.
+})
+.then(response => response.json()) // 輸出成 json
+}
+
+
+
+    // 串接fb 登入登出api
     var finished_rendering = function() {
   console.log("finished rendering plugins");
   var spinner = document.getElementById("spinner");
@@ -45,11 +126,11 @@
         appId      : '{215404490359853}',
         cookie     : true,
         xfbml      : true,
-        version    : 'v2.12',
-        auto_logout_link: true
+        version    : 'v2.12'
       });
       //記錄用戶行為資料 可在後台查看用戶資訊
       FB.AppEvents.logPageView();   
+      
     };
   //嵌入臉書sdk
     (function(d, s, id){
@@ -60,5 +141,7 @@
        fjs.parentNode.insertBefore(js, fjs);
      }(document, 'script', 'facebook-jssdk'));
    
+
+
   </script>
 </html>
